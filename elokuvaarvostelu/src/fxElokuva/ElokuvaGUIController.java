@@ -1,15 +1,36 @@
 package fxElokuva;
 
+import java.io.PrintStream;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import elokuva.Elokuva;
+import elokuva.KokoElokuva;
+import elokuva.SailoException;
 import fi.jyu.mit.fxgui.Dialogs;
+import fi.jyu.mit.fxgui.ListChooser;
+import fi.jyu.mit.fxgui.TextAreaOutputStream;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.text.Font;
 
 /**
  * @author Eelis, Tero
  * @version 1.2.2024
  *
  */
-public class ElokuvaGUIController {
-
+public class ElokuvaGUIController implements Initializable{
+    
+    @FXML private ListChooser<Elokuva> chooserElokuvat;
+    @FXML private ScrollPane panelElokuva;
+    
+    @Override
+    public void initialize(URL url, ResourceBundle bundle) {
+        alusta();
+    }
+    
     @FXML private void handleAvaa() {
         avaaElokuva();
     }
@@ -24,6 +45,17 @@ public class ElokuvaGUIController {
     
     // ======================================================================
    
+    private KokoElokuva kokoelokuva;
+    private TextArea areaElokuva = new TextArea(); // TODO: väliaikainen, poista myöhemmin
+    // TODO: VOISI EHKÄ TEXTFIELDIN MUUTTAA PAAIKKUNA.FXML
+    
+    private void alusta() {
+        chooserElokuvat.clear();
+        panelElokuva.setContent(areaElokuva);
+        areaElokuva.setFont(new Font("Courier New", 12));
+        chooserElokuvat.clear();
+        chooserElokuvat.addSelectionListener(e -> naytaElokuva());
+    }
 
     /**
      * 
@@ -34,12 +66,36 @@ public class ElokuvaGUIController {
     }
 
     
+    private void hae(int enro) {
+        chooserElokuvat.clear();
+        
+        int index = 0;
+        for (int i = 0; i< kokoelokuva.getElokuvat(); i++) {
+            Elokuva elokuva = kokoelokuva.annaElokuva(i);
+            if (elokuva.getElokuvaId() == enro) index = i;
+            chooserElokuvat.add(""+elokuva.getElokuvaNimi(), elokuva);
+        }
+        chooserElokuvat.setSelectedIndex(index);
+    }
+    
     /**
      * 
      */
-    public void lisaaElokuva() {
-        Dialogs.showMessageDialog("En osaa",
-                dlg -> dlg.getDialogPane().setPrefWidth(400));
+    private void lisaaElokuva() {
+        Elokuva uusi = new Elokuva();
+        uusi.lisaaElokuva();
+        uusi.taytaValmisLeffa();
+        try {
+            kokoelokuva.lisaa(uusi);
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Alkiot loppuivat kesken!" +e.getMessage(),
+                    dlg -> dlg.getDialogPane().setPrefWidth(700));
+        }
+        hae(uusi.getElokuvaId());
+        
+        
+       // Dialogs.showMessageDialog("En osaa",
+       //         dlg -> dlg.getDialogPane().setPrefWidth(400));
     }
 
     /**
@@ -61,4 +117,24 @@ public class ElokuvaGUIController {
         return true;
     }
 	
+    /**
+     * 
+     */
+    public void naytaElokuva() {
+        Elokuva elokuvaKohdalla = chooserElokuvat.getSelectedObject();
+        
+        if (elokuvaKohdalla == null) return;
+        
+        areaElokuva.setText("");
+        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaElokuva)) {
+            elokuvaKohdalla.tulosta(os);
+        }
+    }
+    
+    /**
+     * @param kokoelokuva Mikä elokuva
+     */
+    public void setElokuva(KokoElokuva kokoelokuva) {
+        this.kokoelokuva = kokoelokuva;
+    }    
 }

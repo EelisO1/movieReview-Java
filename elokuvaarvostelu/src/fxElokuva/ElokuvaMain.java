@@ -1,5 +1,6 @@
 package fxElokuva;
 	
+import elokuva.KokoElokuva;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -32,6 +33,9 @@ public class ElokuvaMain extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Elokuva");
 			primaryStage.show();
+			
+			KokoElokuva elokuva = new KokoElokuva();
+			ElokuvaCtrl.setElokuva(elokuva);
 			
 			if ( !ElokuvaCtrl.avaa() ) Platform.exit();
 		} catch(Exception e) {

@@ -18,4 +18,12 @@ public class ElokuvaikkunaGUIController {
         Dialogs.showMessageDialog("En osaa",
                 dlg -> dlg.getDialogPane().setPrefWidth(400));
   }
+    
+    /**
+     * 
+     */
+    @FXML public void handleMuokkaa() {
+        Dialogs.showMessageDialog("En osaa",
+                dlg -> dlg.getDialogPane().setPrefWidth(400));
+  }
 }

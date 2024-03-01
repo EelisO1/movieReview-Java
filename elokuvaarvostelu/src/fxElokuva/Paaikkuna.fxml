@@ -52,17 +52,17 @@
          <right>
             <ScrollPane fitToWidth="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <content>
-                  <ListChooser rivit="Barbie&#10;Oppenheimer&#10;Pulp fiction&#10;" />
+                  <ListChooser fx:id="chooserElokuvat" rivit="Barbie&#10;Oppenheimer&#10;Pulp fiction&#10;" />
                </content>
             </ScrollPane>
          </right>
       </BorderPane>
    </left>
    <center>
-      <TextArea prefHeight="400.0" promptText="Kuvaus" text="Kuvaus&#10;&#10;Christopher Nolanin henkeäsalpaava&#10; globaali ilmiö kertoo tositarinaan pohjautuvan atomipommin kehittäjän&#10; J. Robert Oppenheimerin tarinan." BorderPane.alignment="CENTER_LEFT">
+      <ScrollPane fx:id="panelElokuva" prefHeight="400.0" prefWidth="800.0" BorderPane.alignment="CENTER_LEFT">
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>
-      </TextArea>
+      </ScrollPane>
    </center>
 </BorderPane>
