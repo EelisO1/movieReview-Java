@@ -40,14 +40,14 @@ public class Elokuvat {
      *   Elokuvat elokuvat = new Elokuvat();
      *   Elokuva elokuva1 = new Elokuva(), elokuva2 = new Elokuva();
      *   elokuvat.getLkm() === 0;
-     *   elokuvat.lisaa(elokuva1), elokuvat.getLkm() === 1;
-     *   elokuvat.lisaa(elokuva2), elokuvat.getLkm() === 2;
-     *   elokuvat.lisaa(elokuva1), elokuvat.getLkm() === 3;
+     *   elokuvat.lisaa(elokuva1); elokuvat.getLkm() === 1;
+     *   elokuvat.lisaa(elokuva2); elokuvat.getLkm() === 2;
+     *   elokuvat.lisaa(elokuva1); elokuvat.getLkm() === 3;
      *   elokuvat.anna(0) === elokuva1;
      *   elokuvat.anna(1) === elokuva2;
      *   elokuvat.anna(2) === elokuva1;
      *   elokuvat.anna(1) == elokuva1 === false;
-     *   elokuvat.anna(1) == elokuva1 === true;
+     *   elokuvat.anna(1) == elokuva2 === true;
      *   elokuvat.anna(3) === elokuva1; #THROWS IndexOutOfBoundsException
      *   elokuvat.lisaa(elokuva1); elokuvat.getLkm() === 4;
      *   elokuvat.lisaa(elokuva1); elokuvat.getLkm() === 5;
