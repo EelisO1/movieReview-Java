@@ -1,5 +1,7 @@
 package elokuva;
 
+import java.util.List;
+
 /**
  * |------------------------------------------------------------------------|
  * | Luokan nimi:   KokoElokuva                         | Avustajat:        |
@@ -19,8 +21,9 @@ package elokuva;
  */
 public class KokoElokuva {
     
-    private Elokuvat elokuvat = new Elokuvat();
-    
+    private final Elokuvat elokuvat = new Elokuvat();
+    private final Arvostelut arvostelut = new Arvostelut();
+    private final Nimimerkit nimimerkit = new Nimimerkit();
     
     
     /**
@@ -31,6 +34,25 @@ public class KokoElokuva {
     public void lisaa(Elokuva elokuva) throws SailoException {
         elokuvat.lisaa(elokuva);
     }
+    
+
+    /**
+     * Lisätään uusi arvostelu
+     * @param arv lisättävä arvostelu
+     */
+    public void lisaa(Arvostelu arv) {
+        arvostelut.lisaa(arv);
+    }
+    
+    
+    /**
+     * Lisätään uusi nimi
+     * @param nimi Lisättävä nimi
+     */
+    public void lisaa(Nimimerkki nimi) {
+        nimimerkit.lisaa(nimi);
+    }
+    
     
     /**
      * @return Palauttaa elokuvien määrän
@@ -47,34 +69,130 @@ public class KokoElokuva {
         return elokuvat.anna(i);
     }
     
+    
+    /**
+     * @param tunnusnro Minkä elokuvan arvostelut
+     * @return Pyydetyn arvostelut
+     * @example
+     * <pre name="test">
+     * #import java.util.*;
+     * 
+     *  Nimimerkit nimimerkit = new Nimimerkit(); 
+     *  
+     *  Nimimerkki nimi1 = new Nimimerkki(); nimi1.rekisteroi(); nimimerkit.lisaa(nimi1);
+     *  Nimimerkki nimi2 = new Nimimerkki(); nimi2.rekisteroi(); nimimerkit.lisaa(nimi2);
+     *  Nimimerkki nimi3 = new Nimimerkki(); nimi3.rekisteroi(); nimimerkit.lisaa(nimi3);
+     *  Nimimerkki nimi4 = new Nimimerkki(); nimi4.rekisteroi(); nimimerkit.lisaa(nimi4);
+     *  Nimimerkki nimi5 = new Nimimerkki(); nimi5.rekisteroi(); nimimerkit.lisaa(nimi5);
+     *  Nimimerkki nimi6 = new Nimimerkki(); nimi6.rekisteroi(); nimimerkit.lisaa(nimi6);
+     *   
+     *  List<Nimimerkki> loytyneet;
+     *  loytyneet = nimimerkit.annaNimet(1);
+     *  loytyneet.size() === 1;
+     *  loytyneet = nimimerkit.annaNimet(2);
+     *  loytyneet.size() === 1;
+     *  loytyneet = nimimerkit.annaNimet(3);
+     *  loytyneet.size() === 1;
+     *  loytyneet.get(0) == nimi3 === true;
+     *  loytyneet.get(0) == nimi2 === false;
+     *  loytyneet = nimimerkit.annaNimet(3);
+     *  loytyneet.size() === 1;
+     *  loytyneet.get(0) == nimi3 === true;
+     *  loytyneet.get(0) == nimi1 === false;
+     * </pre>
+     */
+    public List<Nimimerkki> annaNimet(int tunnusnro) {
+        return nimimerkit.annaNimet(tunnusnro);
+    } 
+    
+    
+    /**
+     *  Minkä elokuvan arvostelut halutaan etsiä
+     * @param elokuva Minkä elokuvan harrastukset?
+     * @return antaa numeron jolla voidaan hakea arvostelut tietystä elokuvasta
+     * @example
+     * <pre name="test">
+     *  #import java.util.*;
+     *  
+     *    KokoElokuva kokoelokuva = new KokoElokuva();
+     *    Elokuva elokuva1 = new Elokuva(); Elokuva elokuva2 = new Elokuva(); Elokuva elokuva3 = new Elokuva();
+     *    elokuva1.lisaaElokuva(); elokuva2.lisaaElokuva(); elokuva3.lisaaElokuva(); 
+     *    int id1 = elokuva1.getElokuvaId();
+     *    int id2 = elokuva2.getElokuvaId();
+     *    Arvostelu arvostelu11 = new Arvostelu(id1); kokoelokuva.lisaa(arvostelu11);
+     *    Arvostelu arvostelu12 = new Arvostelu(id1); kokoelokuva.lisaa(arvostelu12);
+     *    Arvostelu arvostelu21 = new Arvostelu(id2); kokoelokuva.lisaa(arvostelu21);
+     *    Arvostelu arvostelu22 = new Arvostelu(id2); kokoelokuva.lisaa(arvostelu22);
+     *    Arvostelu arvostelu23 = new Arvostelu(id2); kokoelokuva.lisaa(arvostelu23);
+     *    
+     *    List<Arvostelu> loytyneet;
+     *    loytyneet = kokoelokuva.annaArvostelut(elokuva3);
+     *    loytyneet.size() === 0;
+     *    loytyneet = kokoelokuva.annaArvostelut(elokuva1);
+     *    loytyneet.size() === 2;
+     *    loytyneet.get(0) == arvostelu11 === true;
+     *    loytyneet.get(1) == arvostelu12 === true;
+     *    loytyneet = kokoelokuva.annaArvostelut(elokuva2);
+     *    loytyneet.size() === 3;
+     *    loytyneet.get(0) == arvostelu21 === true;
+     * </pre> 
+     */
+    public List<Arvostelu> annaArvostelut(Elokuva elokuva) {
+        return arvostelut.annaArvostelut(elokuva.getElokuvaId());
+    }
+    
     /**
      * @param args eikäyt.
      */
     public static void main(String[] args) {
         KokoElokuva kokoelokuva = new KokoElokuva();
         
-        Elokuva elokuva1 = new Elokuva();
-        Elokuva elokuva2 = new Elokuva();
-        
-        elokuva1.lisaaElokuva();
-        elokuva1.taytaValmisLeffa();
-        
-        elokuva2.lisaaElokuva();
-        elokuva2.taytaValmisLeffa();
-        
         try {
+            Elokuva elokuva1 = new Elokuva();
+            Elokuva elokuva2 = new Elokuva();
+            
+            elokuva1.lisaaElokuva();
+            elokuva1.taytaValmisLeffa();
+            
+            elokuva2.lisaaElokuva();
+            elokuva2.taytaValmisLeffa();
+            
             kokoelokuva.lisaa(elokuva1);
             kokoelokuva.lisaa(elokuva2);
+            
+            Arvostelu arvostelu1 = new Arvostelu();
+            arvostelu1.rekisteroi();
+            arvostelu1.taytaArvostelu(elokuva2.getElokuvaId());
+            Arvostelu arvostelu2 = new Arvostelu();
+            arvostelu2.rekisteroi();
+            arvostelu2.taytaArvostelu(elokuva1.getElokuvaId());
+            Arvostelu arvostelu3 = new Arvostelu();
+            arvostelu3.rekisteroi();
+            arvostelu3.taytaArvostelu(elokuva2.getElokuvaId());
+            Arvostelu arvostelu4 = new Arvostelu();
+            arvostelu4.rekisteroi();
+            arvostelu4.taytaArvostelu(elokuva2.getElokuvaId());
+            
+            kokoelokuva.lisaa(arvostelu1);
+            kokoelokuva.lisaa(arvostelu2);
+            kokoelokuva.lisaa(arvostelu3);
+            kokoelokuva.lisaa(arvostelu4);
+        
+            System.out.println("===================== TESTAUS ==========================");
+    
+            for (int i = 0; i < kokoelokuva.getElokuvat(); i++) {
+                Elokuva elokuva = kokoelokuva.annaElokuva(i);
+                elokuva.tulosta(System.out);
+                
+                List<Arvostelu> arvostelutList = kokoelokuva.annaArvostelut(elokuva);
+                
+                for (Arvostelu arv : arvostelutList) {
+                    System.out.println(arv.getElokuvaNro() + " elokuvan arvostelu:");
+                    arv.tulosta(System.out);
+                }
+            }
         } catch (SailoException e) {
             System.err.println(e.getMessage());
         }
-        
-        System.out.println("===================== TESTAUS ==========================");
-
-        for (int i = 0; i < kokoelokuva.getElokuvat(); i++) {
-            Elokuva elokuva = kokoelokuva.annaElokuva(i);
-            elokuva.tulosta(System.out);
-        }
     }
-
 }

@@ -26,7 +26,6 @@ public class Elokuva {
     public Elokuva() {}
     
     
-    
     /**
      * @param out Tulostetaan käyttöliittymään tiedot
      */

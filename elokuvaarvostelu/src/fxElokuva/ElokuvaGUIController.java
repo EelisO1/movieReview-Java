@@ -2,10 +2,13 @@ package fxElokuva;
 
 import java.io.PrintStream;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import elokuva.Arvostelu;
 import elokuva.Elokuva;
 import elokuva.KokoElokuva;
+import elokuva.Nimimerkki;
 import elokuva.SailoException;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
@@ -39,8 +42,17 @@ public class ElokuvaGUIController implements Initializable{
         lisaaElokuva();
     }
     
+    @FXML private void handleLisaaArvostelu() {
+        lisaaArvostelu();
+    }
+    
     @FXML private void handleTietoja() {
         tietoja();
+    }
+    
+    // TODO:
+    @FXML private void handleNimenlaittoetusivulle() {
+        // aseta nimimerkki käyttäjälle ja sen kaikille arvosteluille
     }
     
     // ======================================================================
@@ -79,7 +91,7 @@ public class ElokuvaGUIController implements Initializable{
     }
     
     /**
-     * 
+     *  Luo uuden elokuvan
      */
     private void lisaaElokuva() {
         Elokuva uusi = new Elokuva();
@@ -92,12 +104,27 @@ public class ElokuvaGUIController implements Initializable{
                     dlg -> dlg.getDialogPane().setPrefWidth(700));
         }
         hae(uusi.getElokuvaId());
-        
-        
        // Dialogs.showMessageDialog("En osaa",
        //         dlg -> dlg.getDialogPane().setPrefWidth(400));
     }
 
+    
+    private void lisaaArvostelu() {
+        Elokuva elokuvaKohdalla = chooserElokuvat.getSelectedObject();
+        if (elokuvaKohdalla == null) return;
+        Arvostelu arv = new Arvostelu();
+        //TODO: possauta dialogi mihin kirjoittaa arvostelu
+        Nimimerkki nimi = new Nimimerkki();
+        nimi.rekisteroi();
+        nimi.taytaNimi();
+        arv.rekisteroi();
+        arv.taytaArvostelu(elokuvaKohdalla.getElokuvaId());
+        kokoelokuva.lisaa(nimi);
+        kokoelokuva.lisaa(arv);
+        hae(elokuvaKohdalla.getElokuvaId());
+    }
+    
+    
     /**
      * 
      */
@@ -127,7 +154,14 @@ public class ElokuvaGUIController implements Initializable{
         
         areaElokuva.setText("");
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaElokuva)) {
+            os.println("--------------------------------------------");
             elokuvaKohdalla.tulosta(os);
+            os.println("--------------------------------------------");
+            List<Arvostelu> arvostelut = kokoelokuva.annaArvostelut(elokuvaKohdalla);
+            
+            for (Arvostelu arv: arvostelut)
+                arv.tulosta(os);
+            os.println("--------------------------------------------");
         }
     }
     

@@ -19,6 +19,7 @@
           <Menu mnemonicParsing="false" text="Elokuvat">
             <items>
               <MenuItem mnemonicParsing="false" text="Lisää elokuva" onAction="#handleLisaaElokuva"/>
+              <MenuItem mnemonicParsing="false" text="Lisää arvostelu" onAction="#handleLisaaArvostelu"/>
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Tiedosto">
