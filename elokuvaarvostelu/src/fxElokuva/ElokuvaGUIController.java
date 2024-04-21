@@ -118,7 +118,7 @@ public class ElokuvaGUIController implements Initializable{
         nimi.rekisteroi();
         nimi.taytaNimi();
         arv.rekisteroi();
-        arv.taytaArvostelu(elokuvaKohdalla.getElokuvaId());
+        arv.taytaArvostelu(elokuvaKohdalla.getElokuvaId(), nimi.getTunnusnro());
         kokoelokuva.lisaa(nimi);
         kokoelokuva.lisaa(arv);
         hae(elokuvaKohdalla.getElokuvaId());
@@ -144,6 +144,7 @@ public class ElokuvaGUIController implements Initializable{
         return true;
     }
 	
+    
     /**
      * 
      */
@@ -159,8 +160,15 @@ public class ElokuvaGUIController implements Initializable{
             os.println("--------------------------------------------");
             List<Arvostelu> arvostelut = kokoelokuva.annaArvostelut(elokuvaKohdalla);
             
-            for (Arvostelu arv: arvostelut)
-                arv.tulosta(os);
+            for (Arvostelu arv: arvostelut) {
+                int arvostelija = arv.getArvostelijanId();  
+                String arvostelijaNimi = kokoelokuva.annaNimi(arvostelija);
+                
+                arv.tulosta(os, arvostelijaNimi);
+            }
+            
+            
+            
             os.println("--------------------------------------------");
         }
     }

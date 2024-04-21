@@ -38,6 +38,14 @@ public class Arvostelu {
     
     
     /**
+     * @return tunnusnro
+     */
+    public int setArvostelijanId() {
+        return arvostelijanId;
+    }
+    
+    
+    /**
      * Alustetaan tietyn henkilön arvostelu.  // TODO: MIETI TÄMÄ UUSIKSI
      * @param elokuvanId henkilön nimimerkille annettu id
      */
@@ -51,8 +59,10 @@ public class Arvostelu {
      * Osa tiedoista arvotaan jotta kaikilla ei olisi samoja arvoja
      * @param nro viite henkilöön, jonka arvostelusta on kyse
      *  KUN MENNÄÄN TÄYTTÄMÄÄN ARVOSTELUA ELOKUVAN ID ON SEN ELOKUVAN ID MIHIN ARVOSTELUA JÄTETÄÄN
+     * @param tekijanid tekijanid
      */
-    public void taytaArvostelu(int nro) {
+    public void taytaArvostelu(int nro, int tekijanid) {
+        arvostelijanId = tekijanid;
         elokuvanId = nro;
         kommentit = "Tykkäsin näin paljon: " + rand(0, 100) + "%";
         arvosana = rand(0, 5);
@@ -60,10 +70,21 @@ public class Arvostelu {
 
     
     /**
+     * @param nro nro
+     */
+    public void taytaArvostelu(int nro) {
+        elokuvanId = nro;
+        kommentit = "Tykkäsin näin paljon: " + rand(0, 100) + "%";
+        arvosana = rand(0, 5);
+    }
+    
+    /**
      * Tulostetaan arvostelun tiedot
      * @param out tietovirta johon tulostetaan
+     * @param nimi nimi
      */
-    public void tulosta(PrintStream out) {
+    public void tulosta(PrintStream out, String nimi) {
+        out.println("Arvostelija: " + nimi);
         out.println("indeksi " +tunnusNro + " " + kommentit + " " + arvosana +" tähteä");
     }
     
@@ -130,7 +151,7 @@ public class Arvostelu {
      */
     public static void main(String[] args) {
         Arvostelu arv = new Arvostelu();
-        arv.taytaArvostelu(2);
+        arv.taytaArvostelu(2, 2);
         arv.tulosta(System.out);
     }
 

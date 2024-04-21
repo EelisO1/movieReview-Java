@@ -61,6 +61,17 @@ public class Nimimerkit {
     } 
     
     
+    /**
+     * @param tunnusnro s
+     * @return nimi
+     */
+    public String annaNimi(int tunnusnro) {
+        for (Nimimerkki nimi : alkiot) //Iteraattori
+            if (nimi.getTunnusnro() == tunnusnro) return nimi.getNimi();
+        return "";
+    } 
+    
+    
     /** Testiohjelma Arvosteluille
      * @param args eikäyt.
      */

@@ -107,6 +107,18 @@ public class KokoElokuva {
     
     
     /**
+     * @param tunnusnro nro
+     * @return nimi
+     */
+    public String annaNimi(int tunnusnro) {
+        return nimimerkit.annaNimi(tunnusnro);
+    } 
+    
+    
+    
+    
+    
+    /**
      *  Minkä elokuvan arvostelut halutaan etsiä
      * @param elokuva Minkä elokuvan harrastukset?
      * @return antaa numeron jolla voidaan hakea arvostelut tietystä elokuvasta
@@ -160,18 +172,30 @@ public class KokoElokuva {
             kokoelokuva.lisaa(elokuva1);
             kokoelokuva.lisaa(elokuva2);
             
+            
+            Nimimerkki nimimerkki1 = new Nimimerkki();
+            nimimerkki1.rekisteroi();
+            nimimerkki1.taytaNimi();
+            
+            
             Arvostelu arvostelu1 = new Arvostelu();
             arvostelu1.rekisteroi();
-            arvostelu1.taytaArvostelu(elokuva2.getElokuvaId());
+            arvostelu1.taytaArvostelu(elokuva2.getElokuvaId(), nimimerkki1.getTunnusnro());
+
+            Arvostelu arvostelu6 = new Arvostelu();
+            arvostelu6.rekisteroi();
+            arvostelu6.taytaArvostelu(elokuva1.getElokuvaId(), nimimerkki1.getTunnusnro());
+
+            
             Arvostelu arvostelu2 = new Arvostelu();
             arvostelu2.rekisteroi();
-            arvostelu2.taytaArvostelu(elokuva1.getElokuvaId());
+            arvostelu2.taytaArvostelu(elokuva1.getElokuvaId(), nimimerkki1.getTunnusnro());
             Arvostelu arvostelu3 = new Arvostelu();
             arvostelu3.rekisteroi();
-            arvostelu3.taytaArvostelu(elokuva2.getElokuvaId());
+            arvostelu3.taytaArvostelu(elokuva2.getElokuvaId(), nimimerkki1.getTunnusnro());
             Arvostelu arvostelu4 = new Arvostelu();
             arvostelu4.rekisteroi();
-            arvostelu4.taytaArvostelu(elokuva2.getElokuvaId());
+            arvostelu4.taytaArvostelu(elokuva2.getElokuvaId(), nimimerkki1.getTunnusnro());
             
             kokoelokuva.lisaa(arvostelu1);
             kokoelokuva.lisaa(arvostelu2);

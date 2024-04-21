@@ -18,11 +18,10 @@ public class Arvostelut {
      * TODO: MUUTA GETELOKUVANRO
      * Palautetaan mille elokuvalle arvostelu kuuluu
      * @return jäsenen id
-     
     public int getTunnusnro() {
-        return Nimimerkki.getTunnusnro;
+        return Nimimerkki.getTunnusnro();
     }
-    */
+     */     
     
     
     /**
@@ -79,19 +78,19 @@ public class Arvostelut {
         Arvostelu arvostelu1 = new Arvostelu();
         arvostelu1.tekija(1);
         arvostelu1.rekisteroi();
-        arvostelu1.taytaArvostelu(2);
+        arvostelu1.taytaArvostelu(2, 2);
         Arvostelu arvostelu2 = new Arvostelu();
         arvostelu2.tekija(1);
         arvostelu2.rekisteroi();
-        arvostelu2.taytaArvostelu(1);
+        arvostelu2.taytaArvostelu(1, 2);
         Arvostelu arvostelu3 = new Arvostelu();
         arvostelu3.tekija(3);
         arvostelu3.rekisteroi();
-        arvostelu3.taytaArvostelu(2);
+        arvostelu3.taytaArvostelu(2, 2);
         Arvostelu arvostelu4 = new Arvostelu();
         arvostelu4.tekija(2);
         arvostelu4.rekisteroi();
-        arvostelu4.taytaArvostelu(2);
+        arvostelu4.taytaArvostelu(2, 2);
         
         arvostelut.lisaa(arvostelu1);
         arvostelut.lisaa(arvostelu2);

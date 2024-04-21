@@ -43,6 +43,13 @@ public class Nimimerkki {
     }
     
     
+    /**
+     * @return s
+     */
+    public String getNimi() {
+        return nimi;
+    }
+    
     
     
     /**
