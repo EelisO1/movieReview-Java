@@ -64,6 +64,7 @@ public class ElokuvaGUIController implements Initializable{
     private KokoElokuva kokoelokuva;
     private TextArea areaElokuva = new TextArea(); // TODO: väliaikainen, poista myöhemmin
     // TODO: VOISI EHKÄ TEXTFIELDIN MUUTTAA PAAIKKUNA.FXML
+    public int onkotehtykayttaja = 0;
     
     private void alusta() {
         chooserElokuvat.clear();
@@ -118,12 +119,12 @@ public class ElokuvaGUIController implements Initializable{
         if (elokuvaKohdalla == null) return;
         Arvostelu arv = new Arvostelu();
         //TODO: possauta dialogi mihin kirjoittaa arvostelu
-        Nimimerkki nimi = new Nimimerkki();
-        nimi.rekisteroi();
-        nimi.taytaNimi();
+        int pituus = kokoelokuva.getNimetPituus();
+        //Nimimerkki nimi2 = new Nimimerkki(); //TODO: selvitä ID:n avulla arvostelija
+        Nimimerkki nimi = kokoelokuva.annaKayttajanNimiOlio(pituus);
         arv.rekisteroi();
         arv.taytaArvostelu(elokuvaKohdalla.getElokuvaId(), nimi.getTunnusnro());
-        kokoelokuva.lisaa(nimi);
+        //kokoelokuva.lisaa(nimi);
         kokoelokuva.lisaa(arv);
         hae(elokuvaKohdalla.getElokuvaId());
     }
@@ -137,17 +138,20 @@ public class ElokuvaGUIController implements Initializable{
                 dlg -> dlg.getDialogPane().setPrefWidth(400));
     }
     
+    
     /**
-     * EI TARVITA EHK // pelkästään oman nimimerkin asettamista varten ´alustavasti´
+     * EI TARVITA EHK / pelkästään oman nimimerkin asettamista varten ´alustavasti´
      * @return False jos painetaan cancel ja true jos painetaan avaa.
      */
     public boolean avaa() {
-        String uusinimi = ElokuvaNimiController.kysyNimi(null, "elokuva");
-        if (uusinimi == null) return false;
+        String uusinimi = ElokuvaNimiController.kysyNimi(null, "nimimerkki");
+        if (uusinimi == null) return false; 
         lueTiedosto();
+        kokoelokuva.luoKayttaja(uusinimi);
         return true;
     }
 	
+    
     /**
      * @return virheen jos niin käy
      */

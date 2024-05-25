@@ -144,7 +144,7 @@ public class Elokuvat {
         
         
         try {
-            elokuvat.lueTiedostosta("elokuvat");
+            elokuvat.lueTiedostosta("data");
         } catch (SailoException e) {
             System.err.println("ei toimi " + e.getMessage());
         }
@@ -174,7 +174,7 @@ public class Elokuvat {
         }
         
         try {
-            elokuvat.tallenna("elokuvat");
+            elokuvat.tallenna("data");
         } catch (SailoException e) {
             e.printStackTrace();
         }

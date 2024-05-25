@@ -24,7 +24,16 @@ public class Nimimerkit {
      * @param nimi lisättävä nimimerkki
      */
     public void lisaa(Nimimerkki nimi) {
+        System.out.println("Miksi käyt täällä");
         alkiot.add(nimi);
+    }
+    
+    
+    /**
+     * @return nimien määrä alkioissa.
+     */
+    public int getNimetPituus() {
+        return alkiot.size();
     }
     
     
@@ -64,6 +73,18 @@ public class Nimimerkit {
         for (Nimimerkki nimi : alkiot) //Iteraattori
             if (nimi.getTunnusnro() == tunnusnro) loydetyt.add(nimi);
         return loydetyt;
+    } 
+    
+    
+    /**
+     * @param tunnusnro millä haetaan
+     * @return palauttaa käyttäjän olion
+     */
+    public Nimimerkki annaKayttajanNimiOlio(int tunnusnro) {
+        Nimimerkki loydetty = new Nimimerkki();
+        for (Nimimerkki nimi : alkiot) //Iteraattori
+            if (nimi.getTunnusnro() == tunnusnro) loydetty = nimi;
+        return loydetty;
     } 
     
     
@@ -132,7 +153,7 @@ public class Nimimerkit {
         Nimimerkit nimet = new Nimimerkit();
         
         try {
-            nimet.lueTiedostosta("nimimerkit");
+            nimet.lueTiedostosta("data");
         } catch (SailoException e) {
             System.err.println("ei toimi " + e.getMessage());
         }
@@ -173,7 +194,7 @@ public class Nimimerkit {
         }
         
         try {
-            nimet.tallenna("nimimerkit");
+            nimet.tallenna("data");
         } catch (SailoException e) {
             e.printStackTrace();
         }

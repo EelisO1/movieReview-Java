@@ -130,7 +130,7 @@ public class Arvostelut {
         Arvostelut arvostelut = new Arvostelut();
         
         try {
-            arvostelut.lueTiedostosta("arvostelut");
+            arvostelut.lueTiedostosta("data");
         } catch (SailoException e) {
             System.err.println("ei toimi " + e.getMessage());
         }
@@ -178,7 +178,7 @@ public class Arvostelut {
         }
         
         try {
-            arvostelut.tallenna("arvostelut");
+            arvostelut.tallenna("data");
         } catch (SailoException e) {
             e.printStackTrace();
         }

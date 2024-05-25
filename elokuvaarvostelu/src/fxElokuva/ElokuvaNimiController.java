@@ -49,6 +49,9 @@ public class ElokuvaNimiController implements ModalControllerInterface<String> {
     }
     
     
+    //==========================================================================
+    
+    
     /**
      * Luodaan nimenkysymisdialogi ja palautetaan siihen kirjoitettu nimi tai null
      * @param modalityStage mille ollaan modaalisia, null = sovellukselle

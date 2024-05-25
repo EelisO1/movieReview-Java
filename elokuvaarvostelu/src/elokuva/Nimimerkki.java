@@ -54,6 +54,14 @@ public class Nimimerkki {
     
     
     /**
+     * @param nimi2 aseta nimi
+     */
+    public void setNimi(String nimi2) {
+        this.nimi = nimi2;
+    }
+    
+    
+    /**
      * Asettaa tunnusnumeron ja varmistaa että seuraava on suurempi kuin tähän mennessä suurin
      * @param nr asetettava numero
      */

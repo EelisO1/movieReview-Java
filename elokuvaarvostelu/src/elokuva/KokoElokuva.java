@@ -3,6 +3,8 @@ package elokuva;
 import java.io.File;
 import java.util.List;
 
+import fi.jyu.mit.fxgui.Dialogs;
+
 /**
  * |------------------------------------------------------------------------|
  * | Luokan nimi:   KokoElokuva                         | Avustajat:        |
@@ -38,6 +40,25 @@ public class KokoElokuva {
     
 
     /**
+     * @param nimi käyttäjän nimi
+     */
+    public void luoKayttaja(String nimi) {
+        Nimimerkki uusi = new Nimimerkki();
+        uusi.rekisteroi();
+        uusi.setNimi(nimi);
+        nimimerkit.lisaa(uusi);
+    }
+    
+    
+    /**
+     * @return nimimerkit tietokannan pituus
+     */
+    public int getNimetPituus() {
+        return nimimerkit.getNimetPituus();
+    }
+    
+    
+    /**
      * Lisätään uusi arvostelu
      * @param arv lisättävä arvostelu
      */
@@ -72,7 +93,7 @@ public class KokoElokuva {
     
     
     /**
-     * @param tunnusnro Minkä elokuvan arvostelut
+     * @param tunnusnro Minkä / wtf -> elokuvan arvostelut
      * @return Pyydetyn arvostelut
      * @example
      * <pre name="test">
@@ -105,6 +126,15 @@ public class KokoElokuva {
     public List<Nimimerkki> annaNimet(int tunnusnro) {
         return nimimerkit.annaNimet(tunnusnro);
     } 
+    
+    
+    /**
+     * @param tunnusnro Haetaan kannasta viimeinen eli uusin joka on tämänhetkinen käyttäjä
+     * @return käyttäjän olio
+     */
+    public Nimimerkki annaKayttajanNimiOlio(int tunnusnro) {
+        return nimimerkit.annaKayttajanNimiOlio(tunnusnro);
+    }
     
     
     /**
@@ -232,6 +262,7 @@ public class KokoElokuva {
             Nimimerkki nimimerkki1 = new Nimimerkki();
             nimimerkki1.rekisteroi();
             nimimerkki1.taytaNimi();
+
             
             
             Arvostelu arvostelu1 = new Arvostelu();
@@ -257,6 +288,8 @@ public class KokoElokuva {
             kokoelokuva.lisaa(arvostelu2);
             kokoelokuva.lisaa(arvostelu3);
             kokoelokuva.lisaa(arvostelu4);
+            
+            kokoelokuva.lisaa(nimimerkki1);
         
             System.out.println("===================== TESTAUS ==========================");
     
