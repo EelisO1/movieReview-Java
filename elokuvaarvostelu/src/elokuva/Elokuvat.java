@@ -1,5 +1,13 @@
 package elokuva;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.Scanner;
+
 /**
  * +--------------------------------------+--------------------------------------+
  * | Luokan nimi: Elokuvat -luokka        | Avustajat:                           |
@@ -55,7 +63,8 @@ public class Elokuvat {
      * </pre>
      */
     public void lisaa(Elokuva elokuva) throws SailoException {
-        if(lkm >= alkiot.length) throw new SailoException ("Liikaa alkioita ei voida lisätä");
+      //if(lkm >= alkiot.length) throw new SailoException ("Liikaa alkioita ei voida lisätä");
+        if(lkm >= alkiot.length) alkiot = Arrays.copyOf(alkiot, lkm+20);
         alkiot[lkm] = elokuva;
         lkm++;
     }
@@ -78,11 +87,69 @@ public class Elokuvat {
         return alkiot[i];
     }
     
+    
+    /**
+     * Tallentaa elokuvat tiedostoon
+     * @param nimi tiedoston nimi
+     * @throws SailoException jos virhe
+     * @example
+     * <pre name="test">
+     * 
+     * </pre>
+     */
+    public void tallenna(String nimi) throws SailoException {
+        File tiedosto = new File(nimi + "/elokuvat.dat");
+        try (PrintStream fo = new PrintStream(new FileOutputStream(tiedosto, false))) {
+            for (int i = 0; i < getLkm(); i++) {
+                Elokuva elokuva = anna(i);
+                fo.println(elokuva.toString());
+            }
+        }
+            catch (FileNotFoundException ex) {
+                throw new SailoException("Tiedosto " + tiedosto.getAbsolutePath() + " ei aukia");
+                
+            }
+            
+    }
+    
+    /**
+     * @param hakemisto nimi
+     * @throws SailoException virhe
+     */
+    public void lueTiedostosta(String hakemisto) throws SailoException {
+        String nimi = hakemisto + "/elokuvat.dat";
+        File ftied = new File(nimi);
+        
+        try (Scanner fi = new Scanner(new FileInputStream(ftied))) {
+            while (fi.hasNext() ) {
+                String s = fi.nextLine();
+                if (s == null || "".equals(s) || s.charAt(0) == ';') continue;
+                Elokuva elokuva = new Elokuva();
+                elokuva.parse(s);
+                lisaa(elokuva);
+            }
+        } catch ( FileNotFoundException e ) {
+            throw new SailoException("ei lue " + nimi);            
+        }/** catch ( IOException e ) {
+            throw new SailoException("Sisältö ei toimi " + nimi);       
+        }**/ 
+    }
+    
+    
     /**
      * @param args eikäyt.
      */
     public static void main(String[] args) {
         Elokuvat elokuvat = new Elokuvat();
+        
+        
+        try {
+            elokuvat.lueTiedostosta("elokuvat");
+        } catch (SailoException e) {
+            System.err.println("ei toimi " + e.getMessage());
+        }
+        
+        
         Elokuva elokuva1 = new Elokuva();
         Elokuva elokuva2 = new Elokuva();
         
@@ -104,6 +171,12 @@ public class Elokuvat {
             Elokuva elokuva = elokuvat.anna(i);
             System.out.println("Elokuva indeksi: " + i);
             elokuva.tulosta(System.out);
+        }
+        
+        try {
+            elokuvat.tallenna("elokuvat");
+        } catch (SailoException e) {
+            e.printStackTrace();
         }
     }
     

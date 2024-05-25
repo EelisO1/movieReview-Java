@@ -5,6 +5,8 @@ import static kanta.Tarkistukset.rand;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import fi.jyu.mit.ohj2.Mjonot;
+
 /**
  * @author eelis
  * @version 7.3.2024
@@ -127,7 +129,45 @@ public class Arvostelu {
         return tunnusNro;
     }
 
+    /**
+     * Asettaa tunnusnumeron ja varmistaa että seuraava on suurempi kuin tähän mennessä suurin
+     * @param nr asetettava numero
+     */
+    public void setTunnusNro(int nr) {
+        tunnusNro = nr;
+        if (tunnusNro >= seuraavaNro) seuraavaNro = tunnusNro + 1;
+    }
 
+    /**
+     * @param rivi josta arvostelun tiedot otetaan
+     * @example
+     * <pre name="test">
+     *  Arvostelu arv = new Arvostelu();
+     *  arv.parse("   2 | 3   | 3 | 10 | asd");
+     *  arv.getArvostelijanId() === 3;
+     *  arv.toString()          === "2|3|3|10|asd"
+     *  // TODO:jos vielä täyttö + tunnus test.
+     * </pre>
+     */
+    public void parse(String rivi) {
+        StringBuffer sb = new StringBuffer(rivi);
+        setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
+        arvostelijanId = Mjonot.erota(sb, '|', arvostelijanId);
+        elokuvanId = Mjonot.erota(sb, '|', elokuvanId);
+        arvosana = Mjonot.erota(sb, '|', arvosana);
+        kommentit = Mjonot.erota(sb, '|', kommentit);
+    }
+    
+    @Override
+    public String toString() {
+        return "" + 
+                getTunnusNro() + "|" +
+                arvostelijanId + "|" +
+                elokuvanId     + "|" +
+                arvosana       + "|" +
+                kommentit      ;  
+    }
+    
     /**
      * @param nro tekijan nimen id
      */
@@ -152,7 +192,7 @@ public class Arvostelu {
     public static void main(String[] args) {
         Arvostelu arv = new Arvostelu();
         arv.taytaArvostelu(2, 2);
-        arv.tulosta(System.out);
+        arv.tulosta(System.out, "testiNimi");
     }
 
 }

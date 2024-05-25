@@ -3,6 +3,7 @@ package elokuva;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import fi.jyu.mit.ohj2.Mjonot;
 import kanta.Tarkistukset;
 
 /**
@@ -12,11 +13,11 @@ import kanta.Tarkistukset;
  */
 public class Elokuva {
     private int     elokuvaId  = 0; 
+    private String  nimi       = "";
     private int     vuosi      = 0;
     private double  pituus     = 0;
-    private String  nimi       = "";
     private String  genre      = "";
-    private int  ikaraja       = 0;
+    private int     ikaraja    = 0;
     
     private static int seuraavaId = 1;
     
@@ -46,6 +47,16 @@ public class Elokuva {
     public int getElokuvaId() {
         return elokuvaId;
     }
+    
+    
+    /**
+     * @param id id
+     */
+    public void setElokuvaId(int id) {
+        elokuvaId = id;
+        if (elokuvaId >= seuraavaId) seuraavaId = elokuvaId + 1;
+    }
+    
     
     /**
      * @return Palauttaa "this." tämän elokuvan nimen
@@ -87,6 +98,51 @@ public class Elokuva {
         genre      = "Action";
         ikaraja    = Tarkistukset.arvoLuku(1,18);
     }
+    
+    
+    /*
+     * 
+     */
+    @Override
+    public String toString() {
+        return "" + 
+                    getElokuvaId() + "|" +
+                    nimi           + "|" +
+                    vuosi          + "|" +
+                    pituus         + "|" +
+                    genre          + "|" +
+                    ikaraja        ;          
+    }
+    
+    
+    /**
+     * Selvittää elokuvien tiedot '|' erotelluista
+     * Pitää myös huolen että seuraava elokuvan id on suurempi kuin tuleva id 
+     * @param rivi luettu rivi
+     * @example
+     * <pre name="test">
+     *  Elokuva elokuva = new Elokuva();
+     *  elokuva.parse("      3 | Aku Ankka | 23");
+     *  elokuva.getElokuvaId() === 3;
+     *  elokuva.toString().startsWith("3|Aku Ankka|23") === true;
+     *  
+     *  elokuva.taytaValmisLeffa();
+     *  int n = elokuva.getElokuvaId();
+     *  elokuva.parse(""+(n+20)); //otetaan vain id
+     *  elokuva.taytaValmisLeffa();
+     *  elokuva.getElokuvaId() === n+20;
+     * </pre>
+     */
+    public void parse(String rivi)  {
+        StringBuffer sb = new StringBuffer(rivi);
+        setElokuvaId(Mjonot.erota(sb, '|', getElokuvaId()));
+        nimi = Mjonot.erota(sb, '|', nimi);
+        vuosi = Mjonot.erota(sb, '|', vuosi);
+        pituus = Mjonot.erota(sb, '|', pituus);
+        genre = Mjonot.erota(sb, '|', genre);
+        ikaraja = Mjonot.erota(sb, '|', ikaraja);
+    }
+    
     
     /**
      * @param args eikäyt.

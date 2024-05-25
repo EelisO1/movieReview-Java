@@ -1,5 +1,6 @@
 package elokuva;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -21,9 +22,9 @@ import java.util.List;
  */
 public class KokoElokuva {
     
-    private final Elokuvat elokuvat = new Elokuvat();
-    private final Arvostelut arvostelut = new Arvostelut();
-    private final Nimimerkit nimimerkit = new Nimimerkit();
+    private Elokuvat elokuvat = new Elokuvat();
+    private Arvostelut arvostelut = new Arvostelut();
+    private Nimimerkit nimimerkit = new Nimimerkit();
     
     
     /**
@@ -114,9 +115,14 @@ public class KokoElokuva {
         return nimimerkit.annaNimi(tunnusnro);
     } 
     
-    
-    
-    
+    /**
+     * @throws SailoException jos tulee virhe
+     */
+    /*
+    public void lueTiedostosta() throws SailoException {
+        elokuvat = new Elokuvat();
+        
+    }*/
     
     /**
      *  Minkä elokuvan arvostelut halutaan etsiä
@@ -153,11 +159,61 @@ public class KokoElokuva {
         return arvostelut.annaArvostelut(elokuva.getElokuvaId());
     }
     
+    
+    /** Lukee ohjelman tiedot tiedostosta
+     * @param hakemisto Tiedoston nimi
+     * @throws SailoException jos tulee virheitä
+     */
+    public void lueTiedostosta(String hakemisto) throws SailoException {
+        File dir = new File(hakemisto);
+        dir.mkdir();
+        elokuvat = new Elokuvat();
+        arvostelut = new Arvostelut();
+        nimimerkit = new Nimimerkit();
+        
+        elokuvat.lueTiedostosta(hakemisto);
+        arvostelut.lueTiedostosta(hakemisto);
+        nimimerkit.lueTiedostosta(hakemisto);
+    }
+    
+    
+    /**
+     * Tallentaa tiedot tiedostoon
+     * @param hakemisto tiedoston nimi
+     * @throws SailoException jos tulee virheitä
+     */
+    public void tallenna(String hakemisto) throws SailoException {
+        String virhe = "";
+        try {
+            elokuvat.tallenna(hakemisto);
+        } catch (SailoException ex) {
+            virhe = ex.getMessage();
+        }
+        try {
+            arvostelut.tallenna(hakemisto);
+        } catch (SailoException ex) {
+            virhe += ex.getMessage();
+        }
+        try {
+            nimimerkit.tallenna(hakemisto);
+        } catch (SailoException ex) {
+            virhe += ex.getMessage();
+        }
+        if (!"".equals(virhe) ) throw new SailoException(virhe);
+    }
+    
+    
     /**
      * @param args eikäyt.
      */
     public static void main(String[] args) {
         KokoElokuva kokoelokuva = new KokoElokuva();
+        
+        try {
+            kokoelokuva.lueTiedostosta("data");
+        } catch (SailoException e) {
+            System.err.println("ei toimi " + e.getMessage());
+        }
         
         try {
             Elokuva elokuva1 = new Elokuva();
@@ -212,9 +268,18 @@ public class KokoElokuva {
                 
                 for (Arvostelu arv : arvostelutList) {
                     System.out.println(arv.getElokuvaNro() + " elokuvan arvostelu:");
-                    arv.tulosta(System.out);
+                    int arvostelija = arv.getArvostelijanId();  
+                    String arvostelijaNimi = kokoelokuva.annaNimi(arvostelija);
+                    arv.tulosta(System.out, arvostelijaNimi);
                 }
             }
+            
+            try {
+                kokoelokuva.tallenna("data");
+            } catch (SailoException e) {
+                e.printStackTrace();
+            }
+            
         } catch (SailoException e) {
             System.err.println(e.getMessage());
         }

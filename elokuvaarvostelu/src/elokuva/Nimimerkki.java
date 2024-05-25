@@ -4,6 +4,8 @@ import static kanta.Tarkistukset.rand;
 
 import java.io.PrintStream;
 
+import fi.jyu.mit.ohj2.Mjonot;
+
 /**
  * @author eelis
  * @version 27.3.2024
@@ -50,6 +52,40 @@ public class Nimimerkki {
         return nimi;
     }
     
+    
+    /**
+     * Asettaa tunnusnumeron ja varmistaa että seuraava on suurempi kuin tähän mennessä suurin
+     * @param nr asetettava numero
+     */
+    public void setTunnusNro(int nr) {
+        tunnusNro = nr;
+        if (tunnusNro >= seuraavaNro) seuraavaNro = tunnusNro + 1;
+    }
+    
+    
+    /**
+     * @param rivi josta arvostelun tiedot otetaan
+     * @example
+     * <pre name="test">
+     *  Arvostelu arv = new Arvostelu();
+     *  arv.parse("   2 | 3   | 3 | 10 | asd");
+     *  arv.getArvostelijanId() === 3;
+     *  arv.toString()          === "2|3|3|10|asd"
+     *  // TODO:jos vielä täyttö + tunnus test.
+     * </pre>
+     */
+    public void parse(String rivi) {
+        StringBuffer sb = new StringBuffer(rivi);
+        setTunnusNro(Mjonot.erota(sb, '|', getTunnusnro()));
+        nimi = Mjonot.erota(sb, '|', nimi);
+    }
+    
+    @Override
+    public String toString() {
+        return "" + 
+                getTunnusnro() + "|" +
+                nimi ;  
+    }
     
     
     /**

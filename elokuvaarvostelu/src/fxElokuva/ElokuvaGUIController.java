@@ -20,7 +20,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.text.Font;
 
 /**
- * @author Eelis, Tero
+ * @author Eelis
  * @version 1.2.2024
  *
  */
@@ -48,6 +48,10 @@ public class ElokuvaGUIController implements Initializable{
     
     @FXML private void handleTietoja() {
         tietoja();
+    }
+    
+    @FXML private void handleTallenna() {
+        tallenna();
     }
     
     // TODO:
@@ -134,16 +138,43 @@ public class ElokuvaGUIController implements Initializable{
     }
     
     /**
-     * EI TARVITA EHK
+     * EI TARVITA EHK // pelkästään oman nimimerkin asettamista varten ´alustavasti´
      * @return False jos painetaan cancel ja true jos painetaan avaa.
      */
     public boolean avaa() {
         String uusinimi = ElokuvaNimiController.kysyNimi(null, "elokuva");
         if (uusinimi == null) return false;
-       // lueTiedosto(uusinimi);
+        lueTiedosto();
         return true;
     }
 	
+    /**
+     * @return virheen jos niin käy
+     */
+    private String lueTiedosto() {
+        try {
+            kokoelokuva.lueTiedostosta("data"); //vaikka parametrinä kokoelokuva tms minkä keksii kansion nimeksi
+            hae(0);
+            return null;
+        } catch (SailoException e) {
+            hae(0);
+            String virhe = e.getMessage();
+            if (virhe != null) Dialogs.showMessageDialog(virhe);
+            return virhe;
+        }
+    }
+    
+    /**
+     * tallentaa tiedot
+     */
+    private void tallenna() {
+        try {
+            kokoelokuva.tallenna("data");
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog(e.getMessage());
+        }
+    }
+    
     
     /**
      * 
@@ -166,9 +197,6 @@ public class ElokuvaGUIController implements Initializable{
                 
                 arv.tulosta(os, arvostelijaNimi);
             }
-            
-            
-            
             os.println("--------------------------------------------");
         }
     }

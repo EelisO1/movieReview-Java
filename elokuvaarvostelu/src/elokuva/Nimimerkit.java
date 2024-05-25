@@ -1,8 +1,14 @@
 package elokuva;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * @author eelis
@@ -62,6 +68,53 @@ public class Nimimerkit {
     
     
     /**
+     * @param hakemisto nimi
+     * @throws SailoException virhe
+     */
+    public void lueTiedostosta(String hakemisto) throws SailoException {
+        String nimi = hakemisto + "/nimimerkit.dat";
+        File ftied = new File(nimi);
+        
+        try (Scanner fi = new Scanner(new FileInputStream(ftied))) {
+            while (fi.hasNext() ) {
+                String s = fi.nextLine();
+                if (s == null || "".equals(s) || s.charAt(0) == ';') continue;
+                Nimimerkki nimimerkki = new Nimimerkki();
+                nimimerkki.parse(s);
+                lisaa(nimimerkki);
+            }
+        } catch ( FileNotFoundException e ) {
+            throw new SailoException("ei lue " + nimi);            
+        }/** catch ( IOException e ) {
+            throw new SailoException("Sisältö ei toimi " + nimi);       
+        }**/ 
+    }
+    
+    
+    /**
+     * Tallentaa arvostelut tiedostoon
+     * @param nimi tiedoston nimi
+     * @throws SailoException jos virhe
+     * @example
+     * <pre name="test">
+     * 
+     * </pre>
+     */
+    public void tallenna(String nimi) throws SailoException {
+        File tiedosto = new File(nimi + "/nimimerkit.dat");
+        try (PrintStream fo = new PrintStream(new FileOutputStream(tiedosto, false))) {
+            for (var nimet: alkiot) {
+                fo.println(nimet.toString());
+            }
+        }
+            catch (FileNotFoundException ex) {
+                throw new SailoException("Tiedosto " + tiedosto.getAbsolutePath() + " ei aukia");
+                
+            }   
+    }
+    
+    
+    /**
      * @param tunnusnro s
      * @return nimi
      */
@@ -77,6 +130,13 @@ public class Nimimerkit {
      */
     public static void main(String[] args) {
         Nimimerkit nimet = new Nimimerkit();
+        
+        try {
+            nimet.lueTiedostosta("nimimerkit");
+        } catch (SailoException e) {
+            System.err.println("ei toimi " + e.getMessage());
+        }
+        
         Nimimerkki nimi1 = new Nimimerkki();
         nimi1.rekisteroi();
         nimi1.taytaNimi();
@@ -110,6 +170,12 @@ public class Nimimerkit {
         for (Nimimerkki nimi : nimet2) {
             System.out.println(nimi.getTunnusnro());
             nimi.tulosta(System.out);
+        }
+        
+        try {
+            nimet.tallenna("nimimerkit");
+        } catch (SailoException e) {
+            e.printStackTrace();
         }
     }
 }
