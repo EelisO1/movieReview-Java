@@ -18,6 +18,7 @@ public class Elokuva {
     private double  pituus     = 0;
     private String  genre      = "";
     private int     ikaraja    = 0;
+    private String  kuvaus     = "";
     
     private static int seuraavaId = 1;
     
@@ -50,6 +51,17 @@ public class Elokuva {
     
     
     /**
+     * Asettaa nimen ja palauttaa virheen
+     * @param s uusi nimi
+     * @return null jos ok
+     */
+    public String setNimi(String s) {
+        this.nimi = s;
+        return null;
+    }  
+    
+    
+    /**
      * @param id id
      */
     public void setElokuvaId(int id) {
@@ -63,6 +75,13 @@ public class Elokuva {
      */
     public String getElokuvaNimi() {
         return nimi;
+    }
+    
+    /**
+     * @return Palauttaa elokuvan kuvauksen
+     */
+    public String getKuvaus() {
+        return kuvaus;
     }
     
     /** Tehdään uusi id uudelle elokuvalle
@@ -97,6 +116,25 @@ public class Elokuva {
         nimi       = "Terminator " + Tarkistukset.arvoLuku(1, 10); 
         genre      = "Action";
         ikaraja    = Tarkistukset.arvoLuku(1,18);
+        kuvaus     = "Elokuva kertoo tarinan" + Tarkistukset.arvoLuku(1,18);
+    }
+    
+    /**
+     *  Täyttää elokuvan tiedot annetuilla arvoilla
+     * @param vuosiluku vuosi
+     * @param elokuvanPituus pituus
+     * @param elokuvanNimi nimi
+     * @param elokuvanGenre genre
+     * @param elokuvanIkaraja ikaraja
+     * @param elokuvanKuvaus Kuvaus
+     */
+    public void taytaLeffa(int vuosiluku, double elokuvanPituus, String elokuvanNimi, String elokuvanGenre, int elokuvanIkaraja, String elokuvanKuvaus) {
+        vuosi      = vuosiluku; 
+        pituus     = elokuvanPituus; 
+        nimi       = elokuvanNimi; 
+        genre      = elokuvanGenre;
+        ikaraja    = elokuvanIkaraja;
+        kuvaus     = elokuvanKuvaus;
     }
     
     
@@ -111,7 +149,8 @@ public class Elokuva {
                     vuosi          + "|" +
                     pituus         + "|" +
                     genre          + "|" +
-                    ikaraja        ;          
+                    ikaraja        + "|" +
+                    kuvaus         ;          
     }
     
     
@@ -141,6 +180,92 @@ public class Elokuva {
         pituus = Mjonot.erota(sb, '|', pituus);
         genre = Mjonot.erota(sb, '|', genre);
         ikaraja = Mjonot.erota(sb, '|', ikaraja);
+        kuvaus = Mjonot.erota(sb, '|', kuvaus);
+    }
+    
+    
+    /**
+     * @return Palauttaa ensimmäisen mielekkään kentän indeksin
+     */
+    public int ekaKentta() {
+        return 1;
+    }
+    
+    
+    /**
+     * @return palauttaa kenttien määrän
+     */
+    public int getKenttia() {
+        return 7;
+    }  
+    
+    
+    /**     
+     * Asettaa k:n kentän arvoksi parametrina tuodun merkkijonon arvon
+     * @param k kuinka monennen kentän arvo asetetaan
+     * @param jono jonoa joka asetetaan kentän arvoksi
+     * @return null jos asettaminen onnistuu, muuten vastaava virheilmoitus.
+     * @example
+     * <pre name="test">
+     *   Jasen jasen = new Jasen();
+     *   jasen.aseta(1,"Ankka Aku") === null;
+     *   jasen.aseta(2,"kissa") =R= "Hetu liian lyhyt"
+     *   jasen.aseta(2,"030201-1111") === "Tarkistusmerkin kuuluisi olla C"; 
+     *   jasen.aseta(2,"030201-111C") === null; 
+     *   jasen.aseta(9,"kissa") === "Liittymisvuosi väärin jono = \"kissa\"";
+     *   jasen.aseta(9,"1940") === null;
+     * </pre>
+     */
+     public String aseta(int k, String jono) {
+         String tjono = jono == null ? "" : jono.trim();
+         if (tjono.isEmpty()) {
+             return "Input string cannot be empty";
+         }
+         StringBuffer sb = new StringBuffer(tjono);
+         switch (k) {
+             case 0:
+                 setElokuvaId(Mjonot.erota(sb, '§', getElokuvaId()));
+                 return null;
+             case 1:
+                 nimi = tjono;
+                 return null;
+             case 2:
+                 vuosi = Mjonot.erota(sb, '§', vuosi);
+                 return null;
+             case 3:
+                 pituus = Mjonot.erota(sb, '§', pituus);
+                 return null;
+             case 4:
+                 ikaraja = Mjonot.erota(sb, '§', ikaraja);
+                 return null;
+             case 5:
+                 genre = tjono;
+                 return genre;
+             case 6:
+                 kuvaus = tjono;
+                 return null;
+             default:
+                 return "Invalid input";
+         }
+     }
+
+    
+    /**
+     * Palauttaa k:tta elokuvan kenttää vastaavan kysymyksen
+     * @param k kuinka monennen kentän kysymys palautetaan (0-alkuinen)
+     * @return k:netta kenttää vastaava kysymys
+     */
+    public String getKysymys(int k) {
+        switch ( k ) {
+        case 0: return "Elokuvan ID:";
+        case 1: return "Elokuvan nimi:";
+        case 2: return "Vuosi:";
+        case 3: return "Kesto:";
+        case 4: return "Ikäraja:";
+        case 5: return "Genre:";
+        case 6: return "Kuvaus:";
+        default: return "väärin meni:";
+        }
     }
     
     
@@ -161,5 +286,7 @@ public class Elokuva {
         
         elokuva1.tulosta(System.out);
         elokuva2.tulosta(System.out);
-    }    
+    }
+
+
 }

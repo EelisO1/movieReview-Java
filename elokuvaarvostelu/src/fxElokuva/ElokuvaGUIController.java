@@ -8,16 +8,15 @@ import java.util.ResourceBundle;
 import elokuva.Arvostelu;
 import elokuva.Elokuva;
 import elokuva.KokoElokuva;
-import elokuva.Nimimerkki;
 import elokuva.SailoException;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
+import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.TextAreaOutputStream;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.text.Font;
 
 /**
  * @author Eelis
@@ -28,6 +27,7 @@ public class ElokuvaGUIController implements Initializable{
     
     @FXML private ListChooser<Elokuva> chooserElokuvat;
     @FXML private ScrollPane panelElokuva;
+    @FXML private TextArea kuvaus;
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
@@ -35,7 +35,7 @@ public class ElokuvaGUIController implements Initializable{
     }
     
     @FXML private void handleAvaa() {
-        avaaElokuva();
+        //TODO: Poista tämä
     }
     
     @FXML private void handleLisaaElokuva() {
@@ -54,7 +54,7 @@ public class ElokuvaGUIController implements Initializable{
         tallenna();
     }
     
-    // TODO:
+    // TODO: Turha, kikkailtu ympäri
     @FXML private void handleNimenlaittoetusivulle() {
         // aseta nimimerkki käyttäjälle ja sen kaikille arvosteluille
     }
@@ -62,15 +62,12 @@ public class ElokuvaGUIController implements Initializable{
     // ======================================================================
    
     private KokoElokuva kokoelokuva;
-    private TextArea areaElokuva = new TextArea(); // TODO: väliaikainen, poista myöhemmin
-    // TODO: VOISI EHKÄ TEXTFIELDIN MUUTTAA PAAIKKUNA.FXML
-    public int onkotehtykayttaja = 0;
     
     private void alusta() {
-        chooserElokuvat.clear();
-        panelElokuva.setContent(areaElokuva);
-        areaElokuva.setFont(new Font("Courier New", 12));
-        chooserElokuvat.clear();
+        //chooserElokuvat.clear();
+        //panelElokuva.setContent(areaElokuva);
+        //areaElokuva.setFont(new Font("Courier New", 12));
+        //chooserElokuvat.clear();
         chooserElokuvat.addSelectionListener(e -> naytaElokuva());
     }
 
@@ -100,22 +97,62 @@ public class ElokuvaGUIController implements Initializable{
      */
     private void lisaaElokuva() {
         Elokuva uusi = new Elokuva();
-        uusi.lisaaElokuva();
-        uusi.taytaValmisLeffa();
-        try {
-            kokoelokuva.lisaa(uusi);
-        } catch (SailoException e) {
-            Dialogs.showMessageDialog("Alkiot loppuivat kesken!" +e.getMessage(),
-                    dlg -> dlg.getDialogPane().setPrefWidth(700));
+        
+        uusi = ModalController.showModal(ElokuvaGUIController.class.getResource("Lisaaelokuva.fxml"), "Elokuva", null, null);
+        if (uusi == null) {
+            System.out.println("miksi et toimi NULL");
+            return;
         }
-        hae(uusi.getElokuvaId());
-       // Dialogs.showMessageDialog("En osaa",
-       //         dlg -> dlg.getDialogPane().setPrefWidth(400));
+            
+            /* try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Lisaaelokuva.fxml"));
+            Parent root = fxmlLoader.load();
+ 
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Elokuvan lisäys");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+            try {
+                kokoelokuva.lisaa(uusi);
+                //hae(uusi.getElokuvaId());
+                hae(0);
+            } catch (SailoException e) {
+                Dialogs.showMessageDialog("Alkiot loppuivat kesken!" +e.getMessage(),
+                        dlg -> dlg.getDialogPane().setPrefWidth(700));
+            }
+            // Dialogs.showMessageDialog("En osaa",
+            //         dlg -> dlg.getDialogPane().setPrefWidth(400));      
+        return;
     }
 
     
-    private void lisaaArvostelu() {
-        Elokuva elokuvaKohdalla = chooserElokuvat.getSelectedObject();
+   private void lisaaArvostelu() {
+       Elokuva elokuvaKohdalla = chooserElokuvat.getSelectedObject();
+       int elokuvanID = elokuvaKohdalla.getElokuvaId();
+       Arvostelu uusi = ModalController.showModal(JataarvosteluGUIController.class.getResource("JataArvostelu.fxml"), "Arvostelu", null, null);
+       if (uusi == null) {
+           System.out.println("miksi et toimi NULL");
+           return;
+       }
+       uusi.setElokuvanId(elokuvanID);
+       int pituus = kokoelokuva.getNimetPituus(); //Kikkakolmonen :(
+       uusi.setArvostelijanId(pituus);
+       
+      // try {
+           kokoelokuva.lisaa(uusi);
+           hae(elokuvaKohdalla.getElokuvaId());
+       //} catch (IOException e) {
+         //  Dialogs.showMessageDialog("Alkiot loppuivat kesken!" +e.getMessage(),
+           //        dlg -> dlg.getDialogPane().setPrefWidth(700));
+       //}
+           return;
+   }
+       
+      /* vanha 
         if (elokuvaKohdalla == null) return;
         Arvostelu arv = new Arvostelu();
         //TODO: possauta dialogi mihin kirjoittaa arvostelu
@@ -126,19 +163,18 @@ public class ElokuvaGUIController implements Initializable{
         arv.taytaArvostelu(elokuvaKohdalla.getElokuvaId(), nimi.getTunnusnro());
         //kokoelokuva.lisaa(nimi);
         kokoelokuva.lisaa(arv);
-        hae(elokuvaKohdalla.getElokuvaId());
-    }
-    
+        hae(elokuvaKohdalla.getElokuvaId()); */
     
     /**
      * 
      */
-    public void avaaElokuva() {
-        Dialogs.showMessageDialog("En osaa",
-                dlg -> dlg.getDialogPane().setPrefWidth(400));
-    }
-    
-    
+        //elokuvaKohdalla = ModalController.showModal(ElokuvaikkunaGUIController.class.getResource("Elokuvaikkuna.fxml"), "Elokuva", null, null);
+        /*if (uusi == null) {
+            System.out.println("miksi et toimi NULL");
+            return;*/
+        
+        // aseta elokuvaikkunaan tämänhetkisen elokuvan tiedot ja arvostelut
+        
     /**
      * EI TARVITA EHK / pelkästään oman nimimerkin asettamista varten ´alustavasti´
      * @return False jos painetaan cancel ja true jos painetaan avaa.
@@ -184,10 +220,29 @@ public class ElokuvaGUIController implements Initializable{
      * 
      */
     public void naytaElokuva() {
+        kuvaus.clear();
         Elokuva elokuvaKohdalla = chooserElokuvat.getSelectedObject();
         
         if (elokuvaKohdalla == null) return;
-        
+        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(kuvaus)) {
+            os.println("Nimi:  " + elokuvaKohdalla.getElokuvaNimi());
+            os.println("Kuvaus: " + elokuvaKohdalla.getKuvaus());
+            os.println("");
+            os.println("Arvostelut:");
+            os.println("");
+            
+            List<Arvostelu> arvostelut = kokoelokuva.annaArvostelut(elokuvaKohdalla);
+            
+            for (Arvostelu arv: arvostelut) {
+                int arvostelija = arv.getArvostelijanId();  
+                String arvostelijaNimi = kokoelokuva.annaNimi(arvostelija);
+                
+                // Muuta allaolevaa ohjelmaa lopputuloksen näköiseksi
+                arv.tulosta(os, arvostelijaNimi);
+            }
+            
+        }
+        /*
         areaElokuva.setText("");
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaElokuva)) {
             os.println("--------------------------------------------");
@@ -202,7 +257,7 @@ public class ElokuvaGUIController implements Initializable{
                 arv.tulosta(os, arvostelijaNimi);
             }
             os.println("--------------------------------------------");
-        }
+        }*/
     }
     
     /**

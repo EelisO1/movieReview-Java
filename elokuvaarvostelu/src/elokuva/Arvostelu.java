@@ -40,10 +40,18 @@ public class Arvostelu {
     
     
     /**
-     * @return tunnusnro
+     * @param id id
      */
-    public int setArvostelijanId() {
-        return arvostelijanId;
+    public void setElokuvanId(int id) {
+        elokuvanId = id;
+    }
+    
+    
+    /**
+     * @param id id
+     */
+    public void setArvostelijanId(int id) {
+        arvostelijanId = id;;
     }
     
     
@@ -87,7 +95,8 @@ public class Arvostelu {
      */
     public void tulosta(PrintStream out, String nimi) {
         out.println("Arvostelija: " + nimi);
-        out.println("indeksi " +tunnusNro + " " + kommentit + " " + arvosana +" tähteä");
+        out.println(kommentit);
+        out.println(arvosana +" tähteä");
     }
     
     
@@ -157,6 +166,36 @@ public class Arvostelu {
         arvosana = Mjonot.erota(sb, '|', arvosana);
         kommentit = Mjonot.erota(sb, '|', kommentit);
     }
+    
+    
+    /**     
+     * Asettaa k:n kentän arvoksi parametrina tuodun merkkijonon arvon
+     * @param k kuinka monennen kentän arvo asetetaan
+     * @param jono jonoa joka asetetaan kentän arvoksi
+     * @return null jos asettaminen onnistuu, muuten vastaava virheilmoitus.
+     */
+     public String aseta(int k, String jono) {
+         String tjono = jono == null ? "" : jono.trim();
+         if (tjono.isEmpty()) {
+             return "Input string cannot be empty";
+         }
+         //StringBuffer sb = new StringBuffer(tjono);
+         switch (k) {
+             case 0:
+                 //setElokuvaId(Mjonot.erota(sb, '§', getElokuvaId()));
+                 return null;
+             case 1:
+                 int luku = Integer.parseInt(tjono);
+                 arvosana = luku;
+                 return null;
+             case 2:
+                 kommentit = tjono;
+                 return null;
+             default:
+                 return "Invalid input";
+         }
+     }
+    
     
     @Override
     public String toString() {

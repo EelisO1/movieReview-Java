@@ -45,7 +45,7 @@
                <children>
                   <HBox>
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Terminator">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" fx:id="nimi" text="Terminator">
                            <font>
                               <Font name="System Bold Italic" size="20.0" />
                            </font>

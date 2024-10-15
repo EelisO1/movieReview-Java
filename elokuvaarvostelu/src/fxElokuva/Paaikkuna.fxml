@@ -8,6 +8,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
@@ -60,10 +61,13 @@
       </BorderPane>
    </left>
    <center>
-      <ScrollPane fx:id="panelElokuva" prefHeight="400.0" prefWidth="800.0" BorderPane.alignment="CENTER_LEFT">
+      <ScrollPane fx:id="panelElokuva" prefHeight="400.0" prefWidth="313.0" BorderPane.alignment="CENTER_LEFT">
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>
+         <content>
+            <TextArea fx:id="kuvaus" editable="false" prefHeight="398.0" prefWidth="311.0" wrapText="true" />
+         </content>
       </ScrollPane>
    </center>
 </BorderPane>
