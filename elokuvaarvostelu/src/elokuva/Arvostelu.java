@@ -40,10 +40,25 @@ public class Arvostelu {
     
     
     /**
+     * @return kommentit
+     */
+    public String getKommentit() {
+        return kommentit;
+    }
+    
+    /**
      * @param id id
      */
     public void setElokuvanId(int id) {
         elokuvanId = id;
+    }
+    
+    /**
+     * @param nro nro
+     * kikka alustamista varten
+     */
+    public void setArvosana(int nro) {
+        arvosana = nro;
     }
     
     
@@ -190,6 +205,7 @@ public class Arvostelu {
                  return null;
              case 2:
                  kommentit = tjono;
+                 if (kommentit.isEmpty()) return "Kommentteja ei voi jättää tyhjäksi";
                  return null;
              default:
                  return "Invalid input";

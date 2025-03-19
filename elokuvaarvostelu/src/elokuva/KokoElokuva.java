@@ -93,6 +93,46 @@ public class KokoElokuva {
     
     
     /**
+     * Poistaa elokuvan ja siihen liittyvät arvostelut
+     * @param elokuva Poistettava elokuva
+     * @throws SailoException jos menee pieleen
+     * <pre name="test">
+     *   #THROWS SailoException
+     *   KokoElokuva kokoelokuva = new KokoElokuva();
+     *   Elokuva elokuva1 = new Elokuva(); elokuva1.lisaaElokuva(); // ID 1
+     *   Elokuva elokuva2 = new Elokuva(); elokuva2.lisaaElokuva(); // ID 2
+     *   Arvostelu arv1 = new Arvostelu(); arv1.taytaArvostelu(1, 1);
+     *   Arvostelu arv2 = new Arvostelu(); arv2.taytaArvostelu(1, 2);
+     *   kokoelokuva.lisaa(elokuva1);
+     *   kokoelokuva.lisaa(elokuva2);
+     *   kokoelokuva.lisaa(arv1);
+     *   kokoelokuva.lisaa(arv2);
+     *   kokoelokuva.getElokuvat() === 2;
+     *   kokoelokuva.annaArvostelut(elokuva1).size() === 0; //TODO: tarkista
+     *   kokoelokuva.poista(elokuva1);
+     *   kokoelokuva.getElokuvat() === 1;
+     *   kokoelokuva.annaElokuva(0) == elokuva2 === true;
+     *   kokoelokuva.annaArvostelut(elokuva1).size() === 0;
+     *   // Null lisäys
+     *   kokoelokuva.poista(null);
+     *   kokoelokuva.getElokuvat() === 1;
+     *   // Elokuva ilman arvosteluja
+     *   Elokuva elokuva3 = new Elokuva(); elokuva3.lisaaElokuva(); // ID 3
+     *   kokoelokuva.lisaa(elokuva3);
+     *   kokoelokuva.getElokuvat() === 2;
+     *   kokoelokuva.poista(elokuva2); // Ei arvosteluja
+     *   kokoelokuva.getElokuvat() === 1;
+     *   kokoelokuva.annaElokuva(0) == elokuva3 === true;
+     * </pre>
+     */
+    public void poista(Elokuva elokuva) throws SailoException {
+        if (elokuva == null) return;
+        elokuvat.poista(elokuva.getElokuvaId());
+        arvostelut.poistaElokuvanArvostelut(elokuva.getElokuvaId());
+    }
+    
+    
+    /**
      * @param tunnusnro Minkä / wtf -> elokuvan arvostelut
      * @return Pyydetyn arvostelut
      * @example

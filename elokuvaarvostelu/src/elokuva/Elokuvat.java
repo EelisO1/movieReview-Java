@@ -63,7 +63,6 @@ public class Elokuvat {
      * </pre>
      */
     public void lisaa(Elokuva elokuva) throws SailoException {
-      //if(lkm >= alkiot.length) throw new SailoException ("Liikaa alkioita ei voida lisätä");
         if(lkm >= alkiot.length) alkiot = Arrays.copyOf(alkiot, lkm+20);
         alkiot[lkm] = elokuva;
         lkm++;
@@ -111,6 +110,45 @@ public class Elokuvat {
             }
             
     }
+    
+    
+    /**
+     * Poistaa elokuvan ID:n perusteella
+     * @param id Tietyn elokuvan ID joka poistetaan
+     * <pre name="test">
+     *   #THROWS SailoException
+     *   Elokuvat elokuvat = new Elokuvat();
+     *   Elokuva elokuva1 = new Elokuva(); elokuva1.lisaaElokuva(); // ID 1
+     *   Elokuva elokuva2 = new Elokuva(); elokuva2.lisaaElokuva(); // ID 2
+     *   Elokuva elokuva3 = new Elokuva(); elokuva3.lisaaElokuva(); // ID 3
+     *   elokuvat.lisaa(elokuva1); elokuvat.lisaa(elokuva2); elokuvat.lisaa(elokuva3);
+     *   elokuvat.getLkm() === 3;
+     *   elokuvat.poista(2); // Poistaa elokuvan jolla 2 id
+     *   elokuvat.getLkm() === 2;
+     *   elokuvat.anna(0) == elokuva1 === true;
+     *   elokuvat.anna(1) == elokuva3 === true;
+     *   elokuvat.anna(2); #THROWS IndexOutOfBoundsException
+     *   elokuvat.poista(999); // Ei olemassa
+     *   elokuvat.getLkm() === 2; Ei muutosta
+     *   elokuvat.poista(1); // Poista 1 elokuva
+     *   elokuvat.getLkm() === 1;
+     *   elokuvat.anna(0) == elokuva3 === true;
+     * </pre>
+     */
+    public void poista(int id) {
+        for (int i = 0; i < lkm; i++) {
+            if (alkiot[i] != null && alkiot[i].getElokuvaId() == id) {
+                // Liikuttaa alkiot vasemmalle 
+                for (int j = i; j < lkm - 1; j++) {
+                    alkiot[j] = alkiot[j + 1];
+                }
+                alkiot[lkm - 1] = null; // "Tyhjentää" vikan alkion paikan
+                lkm--; 
+                return;
+            }
+        }
+    }
+    
     
     /**
      * @param hakemisto nimi

@@ -35,6 +35,10 @@ public class JataarvosteluGUIController implements ModalControllerInterface<Arvo
     
     @FXML
     void handleLisaa() {
+        if (uusiArvostelu.getKommentit() == "") {
+            naytaVirhe("Kommentit ei voi olla tyhjiä");
+        return;
+        }
         lisaa();
     }
 
@@ -51,6 +55,9 @@ public class JataarvosteluGUIController implements ModalControllerInterface<Arvo
 
     @Override
     public Arvostelu getResult() {
+        if (uusiArvostelu.getTunnusNro() == 0) {
+            return null;
+        }
         return uusiArvostelu;
     }
 
@@ -75,6 +82,7 @@ public class JataarvosteluGUIController implements ModalControllerInterface<Arvo
     
     private void alusta() {
         edits = luoKentat(gridKentat);
+        uusiArvostelu.setArvosana(1);
         mySlider.valueProperty().addListener(new ChangeListener<Number>() {
 
             @Override
@@ -125,6 +133,7 @@ public class JataarvosteluGUIController implements ModalControllerInterface<Arvo
                 edits1[k] = edit;
                 edit.setId("e"+k);
                 gridPane.add(kommenttiKentta, 1, i);
+                continue;
             }
             
             if (k==3) {
@@ -177,17 +186,6 @@ public class JataarvosteluGUIController implements ModalControllerInterface<Arvo
             String virhe = uusiArvostelu.aseta(k, s);
             naytaVirhe(virhe);  
         }
-        
-        /*int k = getFieldId(edit,1);
-        String s = edit.getText();
-        System.out.println(s);
-        String virhe = null;
-        virhe = uusiArvostelu.aseta(k, s);
-        if (virhe == null) {
-            naytaVirhe(virhe);
-        } else {
-            naytaVirhe(virhe);
-        }*/
     }
     
     
@@ -203,6 +201,7 @@ public class JataarvosteluGUIController implements ModalControllerInterface<Arvo
     
     
     private void lisaa() {
+        
         ModalController.closeStage(labelVirhe);
         
         uusiArvostelu.rekisteroi();

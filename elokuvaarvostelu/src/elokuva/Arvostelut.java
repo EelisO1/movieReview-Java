@@ -25,10 +25,36 @@ public class Arvostelut {
      * TODO: MUUTA GETELOKUVANRO
      * Palautetaan mille elokuvalle arvostelu kuuluu
      * @return jäsenen id
+     * Ei vissiin tarvi
     public int getTunnusnro() {
         return Nimimerkki.getTunnusnro();
     }
      */     
+    
+    
+    /**
+     * Poistaa kaikki id:n alla olevat arvostelut
+     * @param elokuvaId Elokuvan id jonka arvostelut poistetaan
+     * @example
+     * <pre name="test">
+     *   Arvostelut arvostelut = new Arvostelut();
+     *   Arvostelu arv1 = new Arvostelu(); arv1.taytaArvostelu(1, 1); arvostelut.lisaa(arv1);
+     *   Arvostelu arv2 = new Arvostelu(); arv2.taytaArvostelu(1, 2); arvostelut.lisaa(arv2);
+     *   Arvostelu arv3 = new Arvostelu(); arv3.taytaArvostelu(2, 1); arvostelut.lisaa(arv3);
+     *   arvostelut.annaArvostelut(1).size() === 2;
+     *   arvostelut.annaArvostelut(2).size() === 1;
+     *   arvostelut.poistaElokuvanArvostelut(1); // Poistetaan ID 1 arvostelut
+     *   arvostelut.annaArvostelut(1).size() === 0;
+     *   arvostelut.annaArvostelut(2).size() === 1;
+     *   arvostelut.poistaElokuvanArvostelut(2); // Poistetaan ID 2 arvostelut
+     *   arvostelut.annaArvostelut(2).size() === 0;
+     *   arvostelut.poistaElokuvanArvostelut(999); // Ei olemassa
+     *   arvostelut.annaArvostelut(1).size() === 0; // Ei muutosta
+     * </pre>
+     */
+    public void poistaElokuvanArvostelut(int elokuvaId) {
+        alkiot.removeIf(arvostelu -> arvostelu.getElokuvaNro() == elokuvaId);
+    }
     
     
     /**

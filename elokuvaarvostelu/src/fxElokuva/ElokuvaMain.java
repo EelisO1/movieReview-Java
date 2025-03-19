@@ -10,7 +10,7 @@ import javafx.fxml.FXMLLoader;
 
 
 /**
- * @author eelis, Tero
+ * @author eelis
  * @version 31.1.2024
  *
  */
@@ -28,7 +28,7 @@ public class ElokuvaMain extends Application {
 		    final Pane root = (Pane)ldr.load();
 		    final ElokuvaGUIController ElokuvaCtrl = (ElokuvaGUIController)ldr.getController();
 		    
-			Scene scene = new Scene(root,500,500);
+			Scene scene = new Scene(root,650,500);
 			scene.getStylesheets().add(getClass().getResource("elokuva.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Elokuva");

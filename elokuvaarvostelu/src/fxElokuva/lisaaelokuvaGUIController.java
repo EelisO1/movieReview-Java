@@ -45,6 +45,7 @@ public class lisaaelokuvaGUIController implements ModalControllerInterface<Eloku
      * Peruutetaan jos ei haluta
      */
     @FXML private void handlePeruuta() {
+        uusiElokuva = null;
         ModalController.closeStage(labelVirhe);
     }
     
@@ -55,6 +56,9 @@ public class lisaaelokuvaGUIController implements ModalControllerInterface<Eloku
     
     @Override
     public Elokuva getResult() {
+        if (uusiElokuva.getElokuvaId() == 0) {
+            return null;
+        }
         return uusiElokuva;
     }
 
@@ -134,7 +138,7 @@ public class lisaaelokuvaGUIController implements ModalControllerInterface<Eloku
         String virhe = null;
         virhe = uusiElokuva.aseta(k, s);
         if (virhe == null) {
-            naytaVirhe(virhe);
+            naytaVirhe("");
         } else {
             naytaVirhe(virhe);
         }
@@ -154,15 +158,18 @@ public class lisaaelokuvaGUIController implements ModalControllerInterface<Eloku
     
 
     private void lisaa() {
+        for (TextField edit : edits) {
+            if (edit != null) {
+                int kenttaIndeksi = getFieldId(edit, apuElokuva.ekaKentta());
+                String virhe = uusiElokuva.aseta(kenttaIndeksi, edit.getText());
+                if (virhe != null) {
+                    naytaVirhe(virhe); 
+                    return;
+                }
+            }
+        }
         uusiElokuva.lisaaElokuva();
         System.out.println(uusiElokuva.toString());
-        
-        if (labelVirhe == null) {
-            System.out.println("labelVirhe is null");
-        } else if (labelVirhe.getScene() == null) {
-            System.out.println("labelVirhe is not attached to a scene");
-        } else {
-            ModalController.closeStage(labelVirhe);
-        }
+        ModalController.closeStage(labelVirhe);
     }
 }

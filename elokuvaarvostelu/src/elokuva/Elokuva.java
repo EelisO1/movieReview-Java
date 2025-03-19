@@ -25,15 +25,34 @@ public class Elokuva {
     /**
      * Alustetaan elokuva tyhjäksi
      */
-    public Elokuva() {}
+    public Elokuva() {
+        //
+    }
     
     
     /**
      * @param out Tulostetaan käyttöliittymään tiedot
      */
     public void tulosta(PrintStream out) {
-        out.println(String.format("%03d", elokuvaId) + "  " + nimi + "  " + vuosi + "  " + pituus + "h  " + genre + "  k-" + ikaraja);
+        out.println(String.format(nimi + "  " + vuosi + "  " + pituus + kumpi(pituus) + "  " + genre + "  k-" + ikaraja));
+        out.println("");
+        out.println("Kuvaus: " + kuvaus);
+        out.println("");
+        out.println("Arvostelut:");
+        out.println("");
     }
+    
+    
+    /**
+     * @param len tarkistettava
+     * @return palauttaa min tai h
+     */
+    public String kumpi(double len) {
+        if (len > 10) return "min";
+        
+        return "h";
+    }
+    
     
     /**
      * @param os Tulostetaan käyttöliittymään tiedot
@@ -76,6 +95,15 @@ public class Elokuva {
     public String getElokuvaNimi() {
         return nimi;
     }
+    
+    
+    /**
+     * @return Palauttaa "this." tämän elokuvan nimen
+     */
+    public int getVuosi() {
+        return vuosi;
+    }
+    
     
     /**
      * @return Palauttaa elokuvan kuvauksen
@@ -231,16 +259,25 @@ public class Elokuva {
                  return null;
              case 2:
                  vuosi = Mjonot.erota(sb, '§', vuosi);
+                 if (vuosi < 1888 || vuosi > 2025) return "Vuosi ei ole kelvollinen";
                  return null;
              case 3:
-                 pituus = Mjonot.erota(sb, '§', pituus);
+                 try {
+                     pituus = Double.parseDouble(tjono);
+                 } catch (NumberFormatException e) {
+                     return "Keston täytyy olla numero";
+                 }
                  return null;
              case 4:
-                 ikaraja = Mjonot.erota(sb, '§', ikaraja);
+                 try {
+                     ikaraja = Integer.parseInt(tjono);
+                 } catch (NumberFormatException e) {
+                     return "Ikärajan täytyy olla numero";
+                 }
                  return null;
              case 5:
                  genre = tjono;
-                 return genre;
+                 return null;
              case 6:
                  kuvaus = tjono;
                  return null;

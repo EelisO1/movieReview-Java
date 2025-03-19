@@ -24,7 +24,6 @@ public class Nimimerkit {
      * @param nimi lisättävä nimimerkki
      */
     public void lisaa(Nimimerkki nimi) {
-        System.out.println("Miksi käyt täällä");
         alkiot.add(nimi);
     }
     
