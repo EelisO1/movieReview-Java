@@ -1,3 +1,6 @@
+# suunnitelma
+https://tim.jyu.fi/view/kurssit/tie/ohj2/2024k/ht/eorhala
+
 # pohja
 
 Pohja kevään 2024 harjoitustöiden GIT-repoille
